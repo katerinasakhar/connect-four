@@ -1,0 +1,11 @@
+
+
+/* Центрируем всё содержимое по центру */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* по горизонтали */
+  justify-content: center; /* по вертикали */
+  min-height: 100vh; /* на всю высоту окна */
+  background-color: #f8fafc;
+}

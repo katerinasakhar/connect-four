@@ -1,0 +1,47 @@
+/* Контейнер всей таблицы */
+.table_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+
+/* Таблица */
+.table {
+  border-collapse: separate;
+  border-spacing: 8px; /* расстояние между кругами */
+  background-color: #004bb4;
+}
+
+/* Общий стиль ячеек */
+.cell {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* делает ячейки круглыми */
+  border: 2px solid #004bb4;
+  background-color: #f8fafc;
+}
+.player1 {
+  background-color: green;
+}
+
+.player2 {
+  background-color: red;
+}
+
+
+/* Адаптивность (мобильные экраны) */
+@media (max-width: 600px) {
+  .cell {
+    width: 40px;
+    height: 40px;
+  }
+
+  .color-table {
+    border-spacing: 5px;
+  }
+}
