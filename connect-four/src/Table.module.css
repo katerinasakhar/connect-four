@@ -2,8 +2,6 @@
 .table_container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 40px;
   background-color: #f8fafc;
   min-height: 100vh;
@@ -13,8 +11,9 @@
 /* Таблица */
 .table {
   border-collapse: separate;
-  border-spacing: 8px; /* расстояние между кругами */
+  border-spacing: 8px; 
   background-color: #004bb4;
+  border-radius: 10%;
 }
 
 /* Общий стиль ячеек */
@@ -33,6 +32,9 @@
   background-color: red;
 }
 
+.hovered {
+  box-shadow: 0 0 15px 5px rgba(100, 149, 237, 0.7);
+}
 
 /* Адаптивность (мобильные экраны) */
 @media (max-width: 600px) {
