@@ -6,11 +6,12 @@ interface TableProps {
   makeMove: (col: number, pl: number) => void
   player: number
   winner: number
-  count: number
+  returnCell: (col:number) => number
 }
 
-function Table({ table, makeMove, player, winner, count }: TableProps) {
+function Table({ table, makeMove, player, winner,returnCell}: TableProps) {
   const [hoveredCol,setHoveredCol]=useState<number | null>(null)
+  const [hoveredCell,setHoveredCell]=useState<number | null>(null)
 
   
   return (
@@ -21,13 +22,28 @@ function Table({ table, makeMove, player, winner, count }: TableProps) {
         <tbody>
           {table.map((row,i)=>(
             <tr key={i}>
-              {row.map((cell,j)=>(
-                <td className={`${styles.cell} ${cell===0 ? hoveredCol===j&&table[0][j] === 0 && winner === 0 ?  `${styles.hovered}` :  "" : cell===1 ? `${styles.player1}` : `${styles.player2}`}`}
+              {row.map((cell,j)=>{
+                const classNames = [styles.cell];
+
+              if (cell === 0) {
+                if (hoveredCol === j && returnCell(j) >= 0 && winner === 0) {
+                  classNames.push(styles.hovered);
+                  if (returnCell(j) === i){ 
+                    classNames.push(styles.hoveredCell);
+                    classNames.push(player === 1 ? styles.player1 : styles.player2);}
+
+                }
+              } else {
+                classNames.push(cell === 1 ? styles.player1 : styles.player2);
+              }
+
+              return (
+                <td className={classNames.join(' ')}
                 onMouseEnter={() => setHoveredCol(j)}
-              onMouseLeave={() => setHoveredCol(null)}
-              onClick={() => {if (table[0][j] !== 0 || winner !== 0) return; 
+              onMouseLeave={() => {setHoveredCol(null)}}
+              onClick={() => {if (returnCell(j)<0|| winner !== 0) return; 
               makeMove(j, player);}}/>
-              ))}
+              )})}
 
             </tr>
           ))

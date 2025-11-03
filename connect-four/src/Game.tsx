@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Table from './Table'
 import tableStyle from './Table.module.css'
 import style from './Game.module.css'
+import "./Modal.css"
 
 
 function Game(){
@@ -10,14 +11,22 @@ function Game(){
     const [winner, setWinner]=useState(0)
     const [place,setPlace]=useState([0,0])
     const [count,setCount]=useState(0)
-      function changePlayer(pl:number){
+    const [points1,setPoints1]=useState(0)
+    const [points2,setPoints2]=useState(0)
+    
+    function changePlayer(pl:number){
     return pl===1 ? 2 : 1
   }
-    function makeMove(col:number, pl:number){
+
+  function returnCell(col:number){
     let row = 5
-    while(table[row][col]!==0){
+    while(table[row][col]!==0&&row>=0){
       row--
     }
+    return row
+  }
+    function makeMove(col:number, pl:number){
+    let row = returnCell(col)
     setCell(row,col,pl)
   }
   function restart(){
@@ -42,6 +51,12 @@ function Game(){
         table[i-2][col]===table[i-3][col]&&
       table[i][col]!==0){
         setWinner(table[row][col])
+        if (table[row][col]===1){
+          setPoints1(points1+1)
+        }
+        else{
+          setPoints2(points2+1)
+        }
         return
       }
     }
@@ -51,6 +66,12 @@ function Game(){
         table[row][i-2]===table[row][i-3]&&
       table[row][i]!==0){
         setWinner(table[row][col])
+        if (table[row][col]===1){
+          setPoints1(points1+1)
+        }
+        else{
+          setPoints2(points2+1)
+        }
         return
       }
     }
@@ -67,6 +88,12 @@ function Game(){
         table[r-2][c-2]===table[r-3][c-3]&&
         table[r][c]!==0){
         setWinner(table[r][c])
+        if (table[r][c]===1){
+          setPoints1(points1+1)
+        }
+        else{
+          setPoints2(points2+1)
+        }
         return
       }
       r--
@@ -86,6 +113,12 @@ function Game(){
         table[r+2][c-2]==table[r+3][c-3]&&
         table[r][c]!==0){
         setWinner(table[r][c])
+        if (table[r][c]===1){
+          setPoints1(points1+1)
+        }
+        else{
+          setPoints2(points2+1)
+        }
         return
       }
       r++
@@ -102,25 +135,22 @@ function Game(){
          <header className={style.header}>
          <div/>
           <div className={style.names}>
-          {winner === 0 ? (
-            <>
+          
             <div
           className={`${style.indicator} ${style.player1} ${
             player === 1 && winner === 0 ? style.active : ''
           }`}
         />
               <span className={player === 1 ? style.activeName : ''}>Игрок 1</span>
+              <span>{points1}</span>
               <span>vs</span>
+              <span>{points2}</span>
               <span className={player === 2 ? style.activeName : ''}>Игрок 2</span>
                <div
           className={`${style.indicator} ${style.player2} ${
             player === 2 && winner === 0 ? style.active : ''
           }`}
         />
-            </>
-          ) : (
-            <span className={style.winnerText}>Победитель: Игрок {winner}</span>
-          )}
         </div>
         
         <button className={style.restartBtn} onClick={restart}>
@@ -133,9 +163,24 @@ function Game(){
         makeMove={makeMove}
         player={player}
         winner={winner}
-        count={count}
+        returnCell={returnCell}
       />
       </div>
+      {winner !== 0 ? (
+        <div className="modalOverlay">
+          <div className="modal">
+            <h2>Победил игрок {winner}!</h2>
+            <button onClick={restart}>Играть снова</button>
+          </div>
+        </div>
+      ): count===42 && (
+        <div className="modalOverlay">
+          <div className="modal">
+            <h2>Ничья</h2>
+            <button onClick={restart}>Играть снова</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
