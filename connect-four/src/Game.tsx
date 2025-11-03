@@ -100,20 +100,29 @@ function Game(){
   return(
     <div className={style.game}>
          <header className={style.header}>
-        <div className={style.indicatorBlock}>
+         <div/>
+          <div className={style.names}>
           {winner === 0 ? (
             <>
-              <span>Сейчас ходит:</span>
-              <div
-                className={`${style.indicator} ${
-                  player === 1 ? style.player1 : style.player2
-                }`}
-              />
+            <div
+          className={`${style.indicator} ${style.player1} ${
+            player === 1 && winner === 0 ? style.active : ''
+          }`}
+        />
+              <span className={player === 1 ? style.activeName : ''}>Игрок 1</span>
+              <span>vs</span>
+              <span className={player === 2 ? style.activeName : ''}>Игрок 2</span>
+               <div
+          className={`${style.indicator} ${style.player2} ${
+            player === 2 && winner === 0 ? style.active : ''
+          }`}
+        />
             </>
           ) : (
-            <span>Победитель: Игрок {winner}</span>
+            <span className={style.winnerText}>Победитель: Игрок {winner}</span>
           )}
         </div>
+        
         <button className={style.restartBtn} onClick={restart}>
           Restart
         </button>
