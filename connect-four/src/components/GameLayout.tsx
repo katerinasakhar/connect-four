@@ -1,5 +1,5 @@
 import React from 'react'
-import style from '../Game.module.css'
+import style from './style/Game.module.css'
 
 
 interface GameLayoutProps {
