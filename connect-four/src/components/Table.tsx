@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import styles from './Table.module.css'
+import styles from './styles/Table.module.css'
 
 interface TableProps {
   table: number[][]
