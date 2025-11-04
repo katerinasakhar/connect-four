@@ -4,11 +4,10 @@ import tableStyle from './Table.module.css'
 import style from './Game.module.css'
 import "./Modal.css"
 
-const ROWS = 6
-const COLUMNS=7
+const HUMAN = 1
+const BOT = 2 
 
-
-function Game(){
+function Bot(){
     const [table, setTable] = useState(Array(6).fill(null).map(() => Array(7).fill(0)))
     const [player, setPlayer]=useState(2)
     const [winner, setWinner]=useState(0)
@@ -16,24 +15,90 @@ function Game(){
     const [count,setCount]=useState(0)
     const [points1,setPoints1]=useState(0)
     const [points2,setPoints2]=useState(0)
+    const [showModal, setShowModal] = useState(false);
+
     
+
+    function botMove(){
+        //Проверяем, может ли бот победить
+        for (let col=0;col<7;col++){
+            const row=returnCell(col)
+            if (row===-1) continue
+            const tempTable = table.map(r => [...r])
+        tempTable[row][col] = BOT
+        if (checkPotentialWin(tempTable, row, col)) {
+            makeMove(col, BOT)
+            return
+        }
+        }
+        //Проверяем, может ли человек победить
+        for (let col = 0; col < 7; col++) {
+            const row = returnCell(col)
+            if (row === -1) continue
+
+            const tempTable = table.map(r => [...r])
+            tempTable[row][col] = HUMAN
+            if (checkPotentialWin(tempTable, row, col)) {
+                makeMove(col, BOT) // Блокируем
+                return
+            }
+        }
+        //Случайный ход
+        const available = []
+        for (let col = 0; col < 7; col++) {
+            if (returnCell(col) !== -1) available.push(col)
+        }
+        if (available.length > 0) {
+            const randomCol = available[Math.floor(Math.random() * available.length)]
+            makeMove(randomCol, BOT)
+        }
+    }
+    function checkPotentialWin(tempTable: number[][], row: number, col: number): boolean {
+        const pl = tempTable[row][col]
+
+        // Проверка вертикали
+        let count = 1
+        for (let i = row + 1; i < 6 && tempTable[i][col] === pl; i++) count++
+        for (let i = row - 1; i >= 0 && tempTable[i][col] === pl; i--) count++
+        if (count >= 4) return true
+
+        // Проверка горизонтали
+        count = 1
+        for (let i = col + 1; i < 7 && tempTable[row][i] === pl; i++) count++
+        for (let i = col - 1; i >= 0 && tempTable[row][i] === pl; i--) count++
+        if (count >= 4) return true
+
+        // Диагональ ↘
+        count = 1
+        for (let i = 1; row + i < 6 && col + i < 7 && tempTable[row + i][col + i] === pl; i++) count++
+        for (let i = 1; row - i >= 0 && col - i >= 0 && tempTable[row - i][col - i] === pl; i++) count++
+        if (count >= 4) return true
+
+        // Диагональ ↙
+        count = 1
+        for (let i = 1; row + i < 6 && col - i >= 0 && tempTable[row + i][col - i] === pl; i++) count++
+        for (let i = 1; row - i >= 0 && col + i < 7 && tempTable[row - i][col + i] === pl; i++) count++
+        if (count >= 4) return true
+
+        return false
+}
     function changePlayer(pl:number){
     return pl===1 ? 2 : 1
   }
 
   function returnCell(col:number){
-    let row = ROWS-1
-    while(table[row][col]!==0&&row>=0){
-      row--
+    for (let row = 5; row >= 0; row--) {
+        if (table[row][col] === 0) return row
     }
-    return row
+    return -1
   }
     function makeMove(col:number, pl:number){
     let row = returnCell(col)
     setCell(row,col,pl)
+    setPlayer(changePlayer(pl))
   }
   function restart(){
-    setTable(Array(ROWS).fill(null).map(() => Array(COLUMNS).fill(0)))
+    setTable(Array(6).fill(null).map(() => Array(7).fill(0)))
     setPlayer(1)
     setWinner(0)
     setCount(0)
@@ -48,7 +113,7 @@ function Game(){
   }
     function checkWin(){
     const [row,col]=place
-    for (let i=ROWS-1; i>=ROWS-3;i--){
+    for (let i=5; i>=3;i--){
       if (table[i][col]===table[i-1][col]&&
         table[i-1][col]===table[i-2][col]&&
         table[i-2][col]===table[i-3][col]&&
@@ -63,7 +128,7 @@ function Game(){
         return
       }
     }
-    for (let i=COLUMNS-1; i>=COLUMNS-4;i--){
+    for (let i=6; i>=3;i--){
       if (table[row][i]===table[row][i-1]&&
         table[row][i-1]===table[row][i-2]&&
         table[row][i-2]===table[row][i-3]&&
@@ -80,7 +145,7 @@ function Game(){
     }
     let r=row
     let c=col
-    while (r+1<6&&c+1<COLUMNS){
+    while (r+1<6&&c+1<7){
       r++
       c++
     }
@@ -105,12 +170,12 @@ function Game(){
     }
     r=row
     c=col
-    while (r-1>=0&&c+1<COLUMNS){
+    while (r-1>=0&&c+1<7){
       r--
       c++
     }
    
-    while(r+3<ROWS&&c-3>=0){
+    while(r+3<6&&c-3>=0){
       if (table[r][c]===table[r+1][c-1]&&
         table[r+1][c-1]==table[r+2][c-2]&&
         table[r+2][c-2]==table[r+3][c-3]&&
@@ -131,8 +196,19 @@ function Game(){
     
   useEffect(()=>{
     checkWin()
-    setPlayer(changePlayer(player))
-  },[place])
+  },[place,table])
+  useEffect(() => {
+  if (winner === 0 && player === BOT) {
+    const timer = setTimeout(() => botMove(), 300)
+    return () => clearTimeout(timer)
+  }
+}, [player, winner])
+  useEffect(() => {
+    if (winner !== 0) {
+        const timer = setTimeout(() => setShowModal(true), 1500);
+        return () => clearTimeout(timer);
+    }
+    }, [winner]);
   return(
     <div className={style.game}>
          <header className={style.header}>
@@ -169,22 +245,25 @@ function Game(){
         returnCell={returnCell}
       />
       </div>
-      {winner !== 0 ? (
-        <div className="modalOverlay">
-          <div className="modal">
-            <h2>Победил игрок {winner}!</h2>
-            <button onClick={restart}>Играть снова</button>
-          </div>
+        {showModal && winner !== 0 && (
+    <div className="modalOverlay">
+        <div className="modal">
+        <h2>Победил игрок {winner}!</h2>
+        <button onClick={restart}>Играть снова</button>
         </div>
-      ): count===42 && (
-        <div className="modalOverlay">
-          <div className="modal">
-            <h2>Ничья</h2>
-            <button onClick={restart}>Играть снова</button>
-          </div>
+    </div>
+    )}
+
+    {!showModal && count === 42 && (
+    <div className="modalOverlay">
+        <div className="modal">
+        <h2>Ничья</h2>
+        <button onClick={restart}>Играть снова</button>
         </div>
-      )}
+    </div>
+    )}
+
     </div>
   )
 }
-export default Game
+export default Bot
