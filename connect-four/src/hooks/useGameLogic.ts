@@ -84,11 +84,12 @@ count,
 points1,
 points2,
 place,
+
 makeMove,
 restart,
 returnCell,
 changePlayer,
 setPlayer,
-setWinner,
+setWinner
 }
 }

@@ -9,7 +9,9 @@ points2: number
 winner: number
 restart: () => void
 modeLabel?: string
-children?: React.ReactNode
+children?: React.ReactNode,
+timer:number
+isTimer:boolean
 }
 
 
@@ -21,12 +23,18 @@ winner,
 restart,
 modeLabel = 'Игрок 2',
 children,
+timer,
+isTimer
 }: GameLayoutProps) {
 return (
 <div className={style.game}>
 <header className={style.header}>
 <div />
 <div className={style.names}>
+    {player==1&&isTimer&&(
+    <span>{timer}</span>
+    )
+}
 <div
 className={`${style.indicator} ${style.player1} ${player === 1 && winner === 0 ? style.active : ''}`}
 />
@@ -38,6 +46,10 @@ className={`${style.indicator} ${style.player1} ${player === 1 && winner === 0 ?
 <div
 className={`${style.indicator} ${style.player2} ${player === 2 && winner === 0 ? style.active : ''}`}
 />
+{player==2&&isTimer&&(
+    <span>{timer}</span>
+    )
+}
 </div>
 
 
