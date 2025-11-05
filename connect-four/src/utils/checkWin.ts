@@ -8,11 +8,14 @@ export interface checkWinRes{
   setWinCells:React.Dispatch<React.SetStateAction<[number, number][]>>
 }
 export function checkWinner():checkWinRes{
+  //масив ячеек с выигрышем
   const [winCells,setWinCells]=useState<[number, number][]>([]);
+  //проверка выигрыша
  function checkWin(table:number[][],row:number,col:number):number{
   
     const pl=table[row][col]
     if (!pl) return 0
+    //по горизонтали влево
      for (let i=5; i>=3;i--){
       if (table[i][col]===table[i-1][col]&&
         table[i-1][col]===table[i-2][col]&&
@@ -27,6 +30,7 @@ export function checkWinner():checkWinRes{
         return pl
       }
     }
+    //по вертикали вверх
     for (let i=6; i>=3;i--){
       if (table[row][i]===table[row][i-1]&&
         table[row][i-1]===table[row][i-2]&&
@@ -41,6 +45,7 @@ export function checkWinner():checkWinRes{
         return pl
       }
     }
+    //проверка диагоналей
     let r=row
     let c=col
     while (r+1<6&&c+1<7){

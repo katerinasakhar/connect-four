@@ -22,24 +22,24 @@ export interface UseLogicResult{
 }
 
 export function useGameLogic(): UseLogicResult{
-    const [table, setTable] = useState(Array(6).fill(null).map(() => Array(7).fill(0)))
-    const [player, setPlayer]=useState(2)
-    const [winner, setWinner]=useState(0)
-    const [place,setPlace]=useState<[number, number]>([0, 0])
-    const [count,setCount]=useState(0)
-    const [points1,setPoints1]=useState(0)
-    const [points2,setPoints2]=useState(0)
-    const [showModal, setShowModal] = useState(false);
-
-    function changePlayer(pl:number){
-    return pl===1 ? 2 : 1
-    }
-    const {
+    const [table, setTable] = useState(Array(6).fill(null).map(() => Array(7).fill(0))) //поле
+    const [player, setPlayer]=useState(2) //игрок
+    const [winner, setWinner]=useState(0) //победитель (если 0 - победителя нет)
+    const [place,setPlace]=useState<[number, number]>([0, 0]) //ячейка которая только чо занялась
+    const [count,setCount]=useState(0) //сколько всего занято
+    const [points1,setPoints1]=useState(0) //количество очков у первого игрока
+    const [points2,setPoints2]=useState(0) //количество очков у вторго игрока
+const {
       winCells,
       checkWin,
       setWinCells
     }=checkWinner()
 
+    function changePlayer(pl:number){
+    return pl===1 ? 2 : 1
+    }
+    
+//возващает самую нижнюю не занятую ячейку в столбце
   function returnCell(col:number){
     for (let row = 5; row >= 0; row--) {
         if (table[row][col] === 0) return row

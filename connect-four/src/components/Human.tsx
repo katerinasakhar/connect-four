@@ -45,8 +45,11 @@ interval = setInterval(() => {
     setTime((t:number) => {
     if (t <= 1) {
         clearInterval(interval);
-        setMessage("Время вышло!");
+        setMessage("Время вышло! Ход передается другому игроку");
         setPlayer(changePlayer(player));
+        setTimeout(() => {
+            setMessage("");
+          }, 3000);
         return timer; 
     }
     return t - 1;
@@ -58,7 +61,7 @@ interval = setInterval(() => {
 
 return (
 <>
-<GameLayout player={player} points1={points1} points2={points2} winner={winner} restart={restart} modeLabel="Игрок 2" timer={time} isTimer={isTimer}>
+<GameLayout player={player} points1={points1} points2={points2} winner={winner} restart={restart} modeLabel="Игрок 2" timer={time} isTimer={isTimer} message={message}>
 <Table table={table} makeMove={(col: number) => {
 makeMove(col, player)
 setPlayer(changePlayer(player))

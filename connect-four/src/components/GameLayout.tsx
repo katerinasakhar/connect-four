@@ -12,20 +12,11 @@ modeLabel?: string
 children?: React.ReactNode,
 timer:number
 isTimer:boolean
+message:string
 }
 
 
-export default function GameLayout({
-player,
-points1,
-points2,
-winner,
-restart,
-modeLabel = 'Игрок 2',
-children,
-timer,
-isTimer
-}: GameLayoutProps) {
+export default function GameLayout({player,points1,points2,winner,restart,modeLabel = 'Игрок 2',children,timer,isTimer,message}: GameLayoutProps) {
 return (
 <div className={style.game}>
 <header className={style.header}>
@@ -57,7 +48,9 @@ className={`${style.indicator} ${style.player2} ${player === 2 && winner === 0 ?
 Restart
 </button>
 </header>
-
+{message!=""&&(
+<span className={style.names}>{message}</span>
+)}
 
 <div className={style.center}>{children}</div>
 </div>

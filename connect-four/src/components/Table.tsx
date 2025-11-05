@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import styles from './style/Table.module.css'
 
 interface TableProps {
@@ -14,7 +14,6 @@ interface TableProps {
 
 function Table({ table, makeMove, player, winner,winCells,isBot,returnCell}: TableProps) {
   const [hoveredCol,setHoveredCol]=useState<number | null>(null)
-  const [hoveredCell,setHoveredCell]=useState<number | null>(null)
 
   
   return (
@@ -30,7 +29,7 @@ function Table({ table, makeMove, player, winner,winCells,isBot,returnCell}: Tab
     let cellContent: React.ReactNode = null; // содержимое ячейки (звезда)
 
     if (cell === 0) {
-      // Подсветка при наведении
+      // подсветка при наведении
       if (hoveredCol === j && returnCell(j) >= 0 && winner === 0&&((player === 2 && !isBot) || player === 1)) {
         
         classNames.push(styles.hovered);
@@ -41,10 +40,10 @@ function Table({ table, makeMove, player, winner,winCells,isBot,returnCell}: Tab
       
       }
     } else {
-      // Клетка занята игроком
+      // клетка занята игроком
       classNames.push(cell === 1 ? styles.player1 : styles.player2);
 
-      // Проверяем, является ли эта клетка выигрышной
+      // проверяем, является ли эта клетка выигрышной
       if (winCells.some(([x, y]: [number, number]) => x === i && y === j)) {
         classNames.push(styles.winCell);
         cellContent =' \u2605';

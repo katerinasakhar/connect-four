@@ -21,8 +21,7 @@ export default function Bot(){
         restart,
         returnCell,
         changePlayer,
-        setPlayer,
-        setWinner
+        setPlayer
     } = useGameLogic()
     const {
       checkWin
@@ -90,7 +89,7 @@ return () => clearTimeout(timer)
 
 return (
 <>
-<GameLayout player={player} points1={points1} points2={points2} winner={winner} restart={restart} modeLabel="Бот" timer={0} isTimer={false}>
+<GameLayout player={player} points1={points1} points2={points2} winner={winner} restart={restart} modeLabel="Бот" timer={0} isTimer={false} message={""}>
 <Table table={table} makeMove={(col: number) => {
 makeMove(col, player)
 setPlayer(changePlayer(player))
