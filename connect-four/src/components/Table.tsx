@@ -7,11 +7,12 @@ interface TableProps {
   player: number
   winner: number
   winCells:[number, number][]
+  isBot:boolean
   returnCell: (col:number) => number
 
 }
 
-function Table({ table, makeMove, player, winner,winCells,returnCell}: TableProps) {
+function Table({ table, makeMove, player, winner,winCells,isBot,returnCell}: TableProps) {
   const [hoveredCol,setHoveredCol]=useState<number | null>(null)
   const [hoveredCell,setHoveredCell]=useState<number | null>(null)
 
@@ -30,12 +31,14 @@ function Table({ table, makeMove, player, winner,winCells,returnCell}: TableProp
 
     if (cell === 0) {
       // Подсветка при наведении
-      if (hoveredCol === j && returnCell(j) >= 0 && winner === 0) {
+      if (hoveredCol === j && returnCell(j) >= 0 && winner === 0&&((player === 2 && !isBot) || player === 1)) {
+        
         classNames.push(styles.hovered);
         if (returnCell(j) === i) {
           classNames.push(styles.hoveredCell);
           classNames.push(player === 1 ? styles.player1 : styles.player2);
         }
+      
       }
     } else {
       // Клетка занята игроком
@@ -50,9 +53,9 @@ function Table({ table, makeMove, player, winner,winCells,returnCell}: TableProp
 
               return (
                 <td className={classNames.join(' ')}
-                onMouseEnter={() => setHoveredCol(j)}
+                onMouseEnter={() => {if ((player==2&&!isBot)||(player==1)) setHoveredCol(j)}}
               onMouseLeave={() => {setHoveredCol(null)}}
-              onClick={() => {if (returnCell(j)<0|| winner !== 0) return; 
+              onClick={() => {if (returnCell(j)<0|| winner !== 0||(player==2&&isBot)) return; 
               makeMove(j, player);}}>{cellContent}</td>
               )})}
 

@@ -30,6 +30,7 @@ const [showModal, setShowModal] = useState(false)
 const [message,setMessage]=useState("")
 const [time,setTime]=useState(timer)
 
+
 useEffect(() => {
 if (winner !== 0) {
 const timer1 = setTimeout(() => setShowModal(true), 500)
@@ -61,7 +62,7 @@ return (
 <Table table={table} makeMove={(col: number) => {
 makeMove(col, player)
 setPlayer(changePlayer(player))
-}} player={player} winner={winner} returnCell={returnCell} winCells={winCells}/>
+}} player={player} winner={winner} returnCell={returnCell} winCells={winCells} isBot={false}/>
 </GameLayout>
 
 

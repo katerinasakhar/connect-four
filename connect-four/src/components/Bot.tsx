@@ -94,7 +94,7 @@ return (
 <Table table={table} makeMove={(col: number) => {
 makeMove(col, player)
 setPlayer(changePlayer(player))
-}} player={player} winner={winner} returnCell={returnCell} winCells={winCells} />
+}} player={player} winner={winner} returnCell={returnCell} winCells={winCells} isBot={true}/>
 </GameLayout>
 
 
