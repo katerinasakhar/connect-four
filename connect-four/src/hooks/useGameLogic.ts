@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { checkWin } from '../utils/checkWin'
+import { checkWinner } from '../utils/checkWin'
 
 const ROWS = 6
 const COLUMN = 7
@@ -12,6 +12,7 @@ export interface UseLogicResult{
     points1: number
     points2: number
     place: [number, number]
+    winCells:[number, number][]
     makeMove: (col: number, pl: number) => void
     restart: () => void
     returnCell: (col: number) => number
@@ -33,6 +34,11 @@ export function useGameLogic(): UseLogicResult{
     function changePlayer(pl:number){
     return pl===1 ? 2 : 1
     }
+    const {
+      winCells,
+      checkWin,
+      setWinCells
+    }=checkWinner()
 
   function returnCell(col:number){
     for (let row = 5; row >= 0; row--) {
@@ -57,6 +63,7 @@ export function useGameLogic(): UseLogicResult{
     setPlayer(1)
     setWinner(0)
     setCount(0)
+    setWinCells([])
   }
   function updatePoints(pl: number) {
 if (pl === 1) setPoints1((p) => p + 1)
@@ -84,7 +91,7 @@ count,
 points1,
 points2,
 place,
-
+winCells,
 makeMove,
 restart,
 returnCell,

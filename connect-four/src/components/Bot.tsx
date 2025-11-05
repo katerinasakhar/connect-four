@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import GameLayout from './GameLayout'
 import Table from './Table'
 import { useGameLogic } from '../hooks/useGameLogic'
-import { checkWin } from '../utils/checkWin'
+import { checkWinner} from '../utils/checkWin'
 import "./style/Modal.css"
 
 const HUMAN = 1
@@ -16,20 +16,24 @@ export default function Bot(){
         count,
         points1,
         points2,
+        winCells,
         makeMove,
         restart,
         returnCell,
         changePlayer,
         setPlayer,
         setWinner
-      
     } = useGameLogic()
+    const {
+      checkWin
+    }=checkWinner()
     const [showModal, setShowModal] = useState(false)
 
 // bot logic: try to win, try to block, else random
 function checkPotentialWin(tempTable: number[][], row: number, col: number) {
 // используем ту же утилиту, но она ожидает, что клетка уже установлена
-return checkWin(tempTable, row, col) !== 0
+const pl=checkWin(tempTable, row, col)
+return pl !== 0
 }
 function botMove() {
 // 1) выигрыш
@@ -90,7 +94,7 @@ return (
 <Table table={table} makeMove={(col: number) => {
 makeMove(col, player)
 setPlayer(changePlayer(player))
-}} player={player} winner={winner} returnCell={returnCell} />
+}} player={player} winner={winner} returnCell={returnCell} winCells={winCells} />
 </GameLayout>
 
 

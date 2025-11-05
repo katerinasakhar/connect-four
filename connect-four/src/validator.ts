@@ -180,4 +180,3 @@ function checkWin(row: number, col: number): Coord[] | null {
 
   return steps;
 }
-console.log(validator)

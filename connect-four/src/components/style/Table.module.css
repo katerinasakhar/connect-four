@@ -39,6 +39,12 @@
 .hoveredCell{
   opacity: 0.5;
 }
+.winCell {
+  text-align: center;
+  font-size: 24px;
+  color: gold;
+  animation: pulse 1s infinite alternate;
+}
 
 /* Адаптивность (мобильные экраны) */
 @media (max-width: 600px) {

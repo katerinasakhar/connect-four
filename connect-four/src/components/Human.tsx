@@ -5,6 +5,7 @@ import { useGameLogic } from '../hooks/useGameLogic'
 import "./style/Modal.css"
 import { useLocation } from 'react-router-dom';
 
+
 export default function Human() {
     const location = useLocation();
   const { isTimer, timer } = location.state || { isTimer: false, timer: 0 };
@@ -16,12 +17,15 @@ winner,
 count,
 points1,
 points2,
+winCells,
 makeMove,
 restart,
 returnCell,
 changePlayer,
 setPlayer
 } = useGameLogic()
+
+
 const [showModal, setShowModal] = useState(false)
 const [message,setMessage]=useState("")
 const [time,setTime]=useState(timer)
@@ -57,7 +61,7 @@ return (
 <Table table={table} makeMove={(col: number) => {
 makeMove(col, player)
 setPlayer(changePlayer(player))
-}} player={player} winner={winner} returnCell={returnCell} />
+}} player={player} winner={winner} returnCell={returnCell} winCells={winCells}/>
 </GameLayout>
 
 

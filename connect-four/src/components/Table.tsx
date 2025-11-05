@@ -6,10 +6,12 @@ interface TableProps {
   makeMove: (col: number, pl: number) => void
   player: number
   winner: number
+  winCells:[number, number][]
   returnCell: (col:number) => number
+
 }
 
-function Table({ table, makeMove, player, winner,returnCell}: TableProps) {
+function Table({ table, makeMove, player, winner,winCells,returnCell}: TableProps) {
   const [hoveredCol,setHoveredCol]=useState<number | null>(null)
   const [hoveredCell,setHoveredCell]=useState<number | null>(null)
 
@@ -22,27 +24,36 @@ function Table({ table, makeMove, player, winner,returnCell}: TableProps) {
         <tbody>
           {table.map((row,i)=>(
             <tr key={i}>
-              {row.map((cell,j)=>{
-                const classNames = [styles.cell];
+               {row.map((cell: number, j: number) => {
+    const classNames: string[] = [styles.cell];
+    let cellContent: React.ReactNode = null; // содержимое ячейки (звезда)
 
-              if (cell === 0) {
-                if (hoveredCol === j && returnCell(j) >= 0 && winner === 0) {
-                  classNames.push(styles.hovered);
-                  if (returnCell(j) === i){ 
-                    classNames.push(styles.hoveredCell);
-                    classNames.push(player === 1 ? styles.player1 : styles.player2);}
+    if (cell === 0) {
+      // Подсветка при наведении
+      if (hoveredCol === j && returnCell(j) >= 0 && winner === 0) {
+        classNames.push(styles.hovered);
+        if (returnCell(j) === i) {
+          classNames.push(styles.hoveredCell);
+          classNames.push(player === 1 ? styles.player1 : styles.player2);
+        }
+      }
+    } else {
+      // Клетка занята игроком
+      classNames.push(cell === 1 ? styles.player1 : styles.player2);
 
-                }
-              } else {
-                classNames.push(cell === 1 ? styles.player1 : styles.player2);
-              }
+      // Проверяем, является ли эта клетка выигрышной
+      if (winCells.some(([x, y]: [number, number]) => x === i && y === j)) {
+        classNames.push(styles.winCell);
+        cellContent =' \u2605';
+      }
+    }
 
               return (
                 <td className={classNames.join(' ')}
                 onMouseEnter={() => setHoveredCol(j)}
               onMouseLeave={() => {setHoveredCol(null)}}
               onClick={() => {if (returnCell(j)<0|| winner !== 0) return; 
-              makeMove(j, player);}}/>
+              makeMove(j, player);}}>{cellContent}</td>
               )})}
 
             </tr>
